@@ -1,0 +1,245 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@font-face {
+  font-family: "gilroy-light";
+  src: url(font/gilroy-light.woff) format("woff");
+
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "gilroy-regular";
+  src: url(font/gilroy-regular.woff) format("woff");
+
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "gilroy-bold";
+  src: url(font/gilroy-bold.woff) format("woff");
+
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "gilroy-heavy";
+  src: url(font/gilroy-heavy.woff) format("woff");
+
+  font-display: swap;
+}
+
+
+:root {
+  --primary: 255, 255, 255; 
+  --secondary: 240, 240, 240; 
+  --line : 218, 218, 218;
+  --header : 37, 37, 37;
+  --body : 75, 75, 75;
+  --table-head: 248,248,248;
+  --table-body: 228,228,228;
+  --table-body: 228,228,228;
+  --accent : 99, 11, 60;
+ 
+ 
+}
+
+.dark {
+
+  --primary: 39, 39, 39; 
+  --secondary: 35, 35, 35; 
+  --line : 75, 75, 75;
+  --header : 255, 255, 255;
+  --body : 120, 120, 120;
+  --table-head: 80, 80, 80;
+  --table-body: 45, 45, 45;
+  --table-hover: 50, 50, 50;
+  --accent : 197, 27, 122;
+  --alert : 189, 26, 75;
+  
+} 
+
+@layer base {
+  body {
+    @apply font-sansRegular leading-relaxed overflow-x-hidden bg-primary text-header tracking-wide	
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply  text-header text-balance leading-tight mb-4 font-bold font-[gilroy-bold]
+  }
+
+  h1 {
+    @apply text-[min(8vw,40px)] 
+  }
+
+  h2 {
+    @apply text-[min(7.5vw,35px)]
+  }
+
+  h3 {
+    @apply text-[min(6vw,20px)]
+  }
+
+  h4 {
+    @apply text-[min(5vw,16px)]
+  }
+
+  h5 {
+    @apply text-[min(4.7vw,14px)]
+  }
+
+  h5 {
+    @apply text-[min(4.2vw,12px)]
+  }
+
+
+  p {
+    @apply mb-1.5 text-balance text-body text-sm
+  }
+
+  img {
+    @apply block w-full
+  }
+
+  button {
+    @apply cursor-pointer bg-transparent outline-none
+  }
+
+  ol, ul {
+    @apply list-none
+  }
+
+  a {
+    @apply no-underline	
+  }
+
+  .input-wrap  {
+    @apply mb-5
+  }
+  label {
+    @apply block text-xs
+  }
+
+  table {
+    @apply w-full rounded-md 
+  }
+
+  table thead {
+    @apply bg-tableHead 
+  }
+
+  table tbody tr {
+    @apply bg-tableBody border-b border-secondary hover:bg-tableHover
+  }
+  table tbody tr td,
+  table thead tr th {
+    @apply p-2 py-3  text-left text-xs font-normal 
+  }
+
+}
+@layer components {
+  .container {
+    @apply max-w-[1400px] mx-auto w-full px-1.5
+  }
+
+ 
+  .lucide {
+    @apply text-header
+  }
+    .table-action
+    {
+      @apply relative flex justify-end
+    }
+
+    .table-action div:hover ul
+    {
+        @apply flex md:block
+    }
+    .table-action div .lucide 
+    {
+      
+    }
+
+    .table-action ul 
+    {
+      @apply flex gap-2 md:absolute 
+      top-[40%] right-6 w-[150px] md:bg-secondary md:rounded-md  md:border border-line md:hidden 
+      overflow-hidden 
+
+
+    }
+
+    .table-action .table-action-menu 
+    {
+        @apply  hidden md:block
+    }
+    .table-action ul .lucide
+    {
+      @apply w-4
+    }
+
+    .table-action ul button
+    {
+      @apply flex gap-4 items-center md:w-full 
+    }
+    .table-action ul button span 
+    {
+      @apply hidden md:block
+    }
+    .table-action ul li
+    {
+      @apply px-2 py-1.5 hover:bg-accent hover:text-white
+    }
+    
+  .btn
+  {
+    @apply flex items-center gap-2 text-[12px] bg-accent px-4 py-2 rounded-md relative 
+    after:absolute after:content-[''] after:top-[3px] after:left-1/2 after:-translate-x-1/2 
+    after:h-1/3 after:bg-gradient-to-b after:from-[#ffffff1c] after:to-transparent after:w-[95%] after:rounded-[3px] 
+    hover:after:from-[#ffffff25] bg-opacity-90 border border-accent 
+    hover:bg-opacity-85 min-w-[100px] justify-center
+                
+  }
+  
+  .btn-outline
+  {
+    @apply after:hidden bg-transparent border-accent text-accent
+  }
+
+  .btn-alert
+  {
+    @apply  bg-alert border-alert text-white
+  }
+
+
+
+  /* NAVIGATION */
+  .nav-link a {
+    @apply hover:text-accent opacity-60
+  }
+  .nav-link-active {
+    @apply relative bg-secondary after:content-[''] after:absolute after:h-full  after:w-[3px] after:top-0 after:right-0 after:bg-accent after:block 
+  }
+  .nav-link-active a { @apply opacity-100}
+
+}
+@layer utilities {}
+
+
+/* .slide-in, 
+.slide-out  {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #0f0f0f;
+    transform-origin: bottom;
+    z-index: 999999;
+}
+
+.slide-out {
+    transform-origin: top;
+} */
