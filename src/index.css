@@ -58,6 +58,8 @@
   --table-hover: 50, 50, 50;
   --accent : 197, 27, 122;
   --alert : 189, 26, 75;
+  --input : 60, 60, 60;
+
   
 } 
 
@@ -165,7 +167,7 @@
     .table-action ul 
     {
       @apply flex gap-2 md:absolute 
-      top-[40%] right-6 w-[150px] md:bg-secondary md:rounded-md  md:border border-line md:hidden 
+      top-[40%] right-6 w-[120px] md:bg-secondary md:rounded-md  md:border border-line md:hidden 
       overflow-hidden 
 
 
@@ -212,10 +214,108 @@
   {
     @apply  bg-alert border-alert text-white
   }
+  
 
+  /* FORM */
+
+  .input-wrapper
+  {
+    @apply relative mb-2
+  }
+
+  .input-wrapper label 
+  {
+    @apply absolute top-3 left-3 text-base transition-all pointer-events-none flex gap-4
+  }
+  .input-wrapper input,
+  .input-wrapper textarea 
+  {
+    @apply px-2 pt-6 pb-1 outline-none rounded-md bg-input border border-transparent  text-sm w-full
+  } 
+  
+  .input-wrapper textarea 
+  {
+    @apply resize-none
+  }
+
+  .input-wrapper input:focus,
+  .input-wrapper textarea:focus
+  {
+     @apply border-accent
+  }
+  .input-wrapper input:focus + label .lucide,
+  .input-wrapper textarea:focus + label .lucide,
+  {
+    @apply hidden
+  }
+
+  .input-wrapper input:disabled,
+  .input-wrapper textarea:disabled
+  {
+     @apply cursor-not-allowed opacity-50
+  }
+
+  .input-wrapper input:focus + label, 
+  .input-wrapper input:valid + label,
+  .input-wrapper input:disabled + label,
+  .input-wrapper textarea:focus + label, 
+  .input-wrapper textarea:valid + label,
+  .input-wrapper textarea:disabled + label
+  { 
+    @apply top-1 left-2 text-xs opacity-50
+  }
+
+  .input-wrapper small
+  {
+    @apply absolute -top-4 right-0 text-[12px] text-alert italic hidden
+
+  }
+  .input-wrapper.error input, 
+  .input-wrapper.error textarea 
+  {
+    @apply border-alert
+  }
+
+  .input-wrapper.error small
+  {
+      @apply block
+  }
+   /* STATUS TOGGLE */
+   .toggle-status
+   {
+    @apply w-[40px] h-[20px] rounded-xl bg-input flex justify-start items-center translate-x-3.5
+   }
+   .toggle-status span 
+{
+    @apply bg-accent size-4 block mx-1 rounded-full bg-stone-500
+   }
+   .toggle-status.active
+   {
+    @apply justify-end 
+   }
+   .toggle-status.active span 
+   {
+    @apply bg-accent
+   }
 
 
   /* NAVIGATION */
+
+  .flex-wrapper:has(.start)
+  {
+    @apply flex justify-start
+  }
+
+  .flex-wrapper:has(.center)
+  {
+    @apply flex justify-center
+  }
+
+  .flex-wrapper:has(.end)
+  {
+    @apply flex justify-end
+  }
+
   .nav-link a {
     @apply hover:text-accent opacity-60
   }
@@ -243,3 +343,6 @@
 .slide-out {
     transform-origin: top;
 } */
+/* CUSTOM CSS */
+input[type="date"]:in-range::-webkit-datetime-edit-year-field, input[type="date"]:in-range::-webkit-datetime-edit-month-field, input[type="date"]:in-range::-webkit-datetime-edit-day-field, 
+input[type="date"]:in-range::-webkit-datetime-edit-text {  color: transparent}

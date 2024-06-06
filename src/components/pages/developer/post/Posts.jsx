@@ -10,16 +10,42 @@ import {
   GripVertical,
   Menu,
   Plus,
+  Search,
   Trash,
 } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import Notification from "@/components/partials/Notification";
+import ModalAddPost from "./ModalAddPost";
 
 const Posts = () => {
    
-  const [showNav, setShowNav] = React.useState(true)
+  const [showNav, setShowNav] = React.useState(true);
+  const [tableFilter, setTableFilter] = React.useState(false);
+  const [toggleStatus, setToggleStatus] = React.useState(false);
+  
+  const handleSetShowNav = () => setShowNav(!showNav);
+  const handleToggleStatus = () => setToggleStatus(!toggleStatus);
+  const handleFilterTable = (filter) => setTableFilter(filter);
 
-  const handleSetShowNav = () => setShowNav(!showNav)
+  
+
+
+ 
+ 
+const springStatus = {
+    type: "spring",
+    stiffness: 700,
+    damping: 20,
+  };
+
+  const springTable = {
+    type: "spring",
+    stiffness: 400,
+    damping: 40,
+    velocity: 100,
+  };
 
   return (
     <>
@@ -111,10 +137,58 @@ const Posts = () => {
             </div>
 
             <div className="table-wrapper  mt-3 rounded-md">
-              <table>
+
+             <div className="flex justify-between mb-3 items-center">
+             <div className="filter">
+              <ul className="flex gap-5">
+              <li
+                      className={`p-2 text-sm ${
+                        tableFilter === "all" ? "opacity-100 text-accent" : "opacity-50"
+                      }`}
+                    ><button  onClick={()=> handleFilterTable("all")}>All</button> </li>
+                <li
+                      className={`p-2 text-sm ${
+                        tableFilter === "active" ? "opacity-100 text-accent" : "opacity-50"
+                      }`}
+                    ><button onClick={()=> handleFilterTable("active")}>Active</button> </li>
+                <li
+                      className={`p-2 text-sm ${
+                        tableFilter === "inactive" ? "opacity-100 text-accent" : "opacity-50"
+                      }`}
+                    > <button onClick={()=> handleFilterTable("inactive")}>Inactive</button> </li>
+              </ul>
+             </div>
+               <div className="search">
+               <form>
+                <div className="input-wrapper">
+
+                <input type="search" 
+                id="search" 
+                className="w-[min(30vw,300px)] block"
+                required
+                />
+                <label htmlFor="search" className="opacity-20" ><Search />Search Keyword</label>
+                 <small>*Reqwuired</small>
+
+                </div>
+               </form>
+               </div>
+             </div>
+
+             <div className="flex-wrapper flex  gap-10">
+        
+
+              <motion.table className={` shrink-0 ${tableFilter === "all" ?  "start" : ""}`}
+              
+              layout transition={{
+                type: "spring",
+                stiffness: 700,
+                damping: 60
+              }}>
                 <thead>
                   <tr>
                     <th className="w-[30px] text-center">#</th>
+                    <th className="w-[80px] text-center">Status 1</th>
                     <th>Title</th>
                     <th></th>
                   </tr>
@@ -122,6 +196,12 @@ const Posts = () => {
                 <tbody>
                   <tr>
                     <td className="w-[30px] text-center">1</td>
+                    <td className="text-center">
+                      <button className={`${toggleStatus ? "active" : ""} toggle-status`}
+                      data-ison={toggleStatus}  
+                      onClick={handleToggleStatus}
+                      ><motion.span layout transition={springStatus}></motion.span></button>
+                      </td>
                     <td>Lorem ipsum dolor sit</td>
                     <td>
 
@@ -135,18 +215,6 @@ const Posts = () => {
                         <li>
                           <button>
                             <FilePenLine /> <span>Edit</span>
-                          </button>
-                        </li>
-
-                        <li>
-                          <button>
-                            <Archive /> <span>Archive</span>
-                          </button>
-                        </li>
-
-                        <li>
-                          <button>
-                            <ArchiveRestore /> <span>Restore</span>
                           </button>
                         </li>
                         <li>
@@ -166,7 +234,119 @@ const Posts = () => {
      
 
                 </tbody>
-              </table>
+              </motion.table>
+
+              <motion.table className={` shrink-0 ${tableFilter === "active" ?  "center" : ""}`} layout transition={springTable} >
+                <thead>
+                  <tr>
+                    <th className="w-[30px] text-center">#</th>
+                    <th className="w-[80px] text-center">Status 2</th>
+                    <th>Title</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="w-[30px] text-center">1</td>
+                    <td className="text-center">
+                      <button className={`${toggleStatus ? "active" : ""} toggle-status`}
+                      data-ison={toggleStatus}  
+                      onClick={handleToggleStatus}
+                      ><motion.span layout transition={springTable} ></motion.span></button>
+                      </td>
+                    <td>Lorem ipsum dolor sit</td>
+                    <td>
+
+                        <div className="table-action ">
+                          <div>
+                            <div className="table-action-menu">
+                            <GripVertical/>
+                            </div>
+
+                            <ul>
+                        <li>
+                          <button>
+                            <FilePenLine /> <span>Edit</span>
+                          </button>
+                        </li>
+                        <li>
+                          <button>
+                            <Trash /> <span>Delete</span> 
+                          </button>
+                        </li>
+                        </ul>
+                          </div>
+
+             
+                        </div>
+
+                    
+                    </td>
+                  </tr>
+     
+
+                </tbody>
+              </motion.table>
+
+              <motion.table className={` shrink-0 ${tableFilter === "inactive" ?  "end" : ""}`}
+              
+              layout transition={springTable} >
+                <thead>
+                  <tr>
+                    <th className="w-[30px] text-center">#</th>
+                    <th className="w-[80px] text-center">Status 3</th>
+                    <th>Title</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="w-[30px] text-center">1</td>
+                    <td className="text-center">
+                      <button className={`${toggleStatus ? "active" : ""} toggle-status`}
+                      data-ison={toggleStatus}  
+                      onClick={handleToggleStatus}
+                      ><motion.span layout transition={{
+                        type: "spring",
+                        stiffness: 700,
+                        damping: 60
+                      }}></motion.span></button>
+                      </td>
+                    <td>Lorem ipsum dolor sit</td>
+                    <td>
+
+                        <div className="table-action ">
+                          <div>
+                            <div className="table-action-menu">
+                            <GripVertical/>
+                            </div>
+
+                            <ul>
+                        <li>
+                          <button>
+                            <FilePenLine /> <span>Edit</span>
+                          </button>
+                        </li>
+                        <li>
+                          <button>
+                            <Trash /> <span>Delete</span> 
+                          </button>
+                        </li>
+                        </ul>
+                          </div>
+
+             
+                        </div>
+
+                    
+                    </td>
+                  </tr>
+     
+
+                </tbody>
+              </motion.table>
+             </div>
+             
             </div>
           </div>
           <footer className="border-t border-line border-opacity-40 opacity-20 flex justify-between py-1">
@@ -176,6 +356,9 @@ const Posts = () => {
           </footer>
         </div>
       </main>
+
+      <ModalAddPost/>
+        {/* <Notification/>             */}
       {/* <ModalConfirm/> */}
         {/* <ModalDelete/> */}
         {/* <ModalError/> */}

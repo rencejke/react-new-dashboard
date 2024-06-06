@@ -21,6 +21,7 @@ export default {
         body: "rgba(var(--body), <alpha-value>)",
         accent: "rgba(var(--accent), <alpha-value>)",
         alert: "rgba(var(--alert), <alpha-value>)",
+        input: "rgba(var(--input), <alpha-value>)",
       },
       backgroundColor: {
         primary: "rgba(var(--primary), <alpha-value>)",
@@ -33,6 +34,7 @@ export default {
         body: "rgba(var(--body), <alpha-value>)",
         accent: "rgba(var(--accent), <alpha-value>)",
         alert: "rgba(var(--alert), <alpha-value>)",
+        input: "rgba(var(--input), <alpha-value>)",
       },
       borderColor: {
         primary: "rgba(var(--primary), <alpha-value>)",
@@ -44,6 +46,7 @@ export default {
         body: "rgba(var(--body), <alpha-value>)",
         accent: "rgba(var(--accent), <alpha-value>)",
         alert: "rgba(var(--alert), <alpha-value>)",
+        input: "rgba(var(--input), <alpha-value>)",
       },
       stroke: {
         primary: "rgba(var(--primary), <alpha-value>)",
@@ -55,6 +58,7 @@ export default {
         body: "rgba(var(--body), <alpha-value>)",
         accent: "rgba(var(--accent), <alpha-value>)",
         alert: "rgba(var(--alert), <alpha-value>)",
+        input: "rgba(var(--input), <alpha-value>)",
       },
 
       ring: {
@@ -67,6 +71,7 @@ export default {
         body: "rgba(var(--body), <alpha-value>)",
         accent: "rgba(var(--accent), <alpha-value>)",
         alert: "rgba(var(--alert), <alpha-value>)",
+        input: "rgba(var(--input), <alpha-value>)",
       },
     },
   },
