@@ -74,6 +74,24 @@ export default {
         input: "rgba(var(--input), <alpha-value>)",
       },
     },
+    keyframes: {
+      rotate: {
+        '100%': { transform: 'rotate(360deg)' }
+      },
+      loading: {
+        '0%': { transform: 'translateX(-100%)' },
+        '100%': { transform: 'translateX(100%)' }
+      },
+      'move-down': {
+        '0%': { transform: 'translateY(0)', opacity: '0.5' },
+        '100%': { transform: 'translateY(40px)', opacity: '0' }
+      }
+    },
+    animation: {
+      rotate: 'rotate 2s linear infinite',
+      loading: 'loading 1.5s ease-in infinite',
+      'move-down': 'move-down 2s infinite'
+    }
   },
   plugins: [],
 };

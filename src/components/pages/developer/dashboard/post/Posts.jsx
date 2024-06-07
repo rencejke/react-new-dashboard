@@ -15,37 +15,120 @@ import {
 } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Notification from "@/components/partials/Notification";
 import ModalAddPost from "./ModalAddPost";
+import { StoreContext } from "@/components/store/StoreContext";
+import { setIsActive, setIsAdd, setIsDelete } from "@/components/store/StoreAction";
+import { springStatus, springTable } from "@/components/helpers/animations";
+import SpinnerFetching from "@/components/spinners/SpinnerFetching";
+import useQueryData from "@/components/custom-hook/useQueryData";
+import TableLoader from "@/components/partials/TableLoader";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { queryData } from "@/components/helpers/queryData";
+
 
 const Posts = () => {
-   
+  const {store, dispatch} = React.useContext(StoreContext);
   const [showNav, setShowNav] = React.useState(true);
   const [tableFilter, setTableFilter] = React.useState(false);
   const [toggleStatus, setToggleStatus] = React.useState(false);
-  
+  const [itemEdit, setItemEdit] = React.useState(null);
+  const [isSearch, setIsSearch] = React.useState(false);
+  const [keyword, setKeyword] = React.useState('');
+  const [id, setId] = React.useState('');
+
   const handleSetShowNav = () => setShowNav(!showNav);
-  const handleToggleStatus = () => setToggleStatus(!toggleStatus);
+  // const handleToggleStatus = () => setToggleStatus(!toggleStatus);
   const handleFilterTable = (filter) => setTableFilter(filter);
 
-  
+
+  const handleAdd = () => {
+    dispatch(setIsAdd(true));
+    setItemEdit(null);
+  }
 
 
- 
- 
-const springStatus = {
-    type: "spring",
-    stiffness: 700,
-    damping: 20,
+  let counter = 1;
+
+  const handleEdit = (item) => {
+      dispatch(setIsAdd(true));
+      setItemEdit(item);
+  }
+
+  // archive is here
+  const handleActive = (item) => {
+      dispatch(setIsActive(true));
+      setId(item.post_aid);
+      setIsArchiving(0);
+  }
+  const handleRestore = (item) => {
+      dispatch(setIsActive(true));
+      setId(item.post_aid);
+      setIsArchiving(1);
+  }
+
+  const handlDelete = (item) => {
+      dispatch(setIsDelete(true));
+      setId(item.post_aid);
+  }
+
+
+  const {
+    isLoading,
+    isFetching,
+    error,
+    data: post,
+  } = useQueryData(
+    isSearch ? "/v1/post/search" : "/v1/post", // endpoint
+    isSearch ? "post" : "get", // method
+    "post", // key
+    {
+        searchValue: keyword
+    }
+  );
+
+
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (values) => queryData( "/v1/post/active", "put", values),
+    onSuccess: (data) => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['post'] });
+
+      if (data.success) {
+        dispatch(setIsActive(false))
+        dispatch(setSuccess(true))
+        dispatch(setMessage(`Record successfully`))
+      } else {
+        // setIsError(true)
+        // setMessage(data.error)
+      }
+    
+    },
+  });
+
+  const handleConfirmed = async (id, isArchiving) => {
+    mutation.mutate({
+      id:id,
+      isActive: !isArchiving === true ? 1 : 0,
+    });
   };
 
-  const springTable = {
-    type: "spring",
-    stiffness: 400,
-    damping: 40,
-    velocity: 100,
-  };
+
+  const handleDelete = (item) => 
+    {
+      dispatch(setIsDelete(true));
+      setId(item.post_aid);
+    }
+
+
+
+
+
+
+
 
   return (
     <>
@@ -131,7 +214,7 @@ const springStatus = {
                   Labore, eos!
                 </p>
               </div>
-              <button className="flex items-center gap-2 text-[12px] bg-accent px-4 py-2 rounded-md relative after:absolute after:content-[''] after:top-[3px] after:left-1/2 after:-translate-x-1/2 after:h-1/3 after:bg-gradient-to-b after:from-[#ffffff1c] after:to-transparent after:w-[95%] after:rounded-[3px] hover:after:from-[#ffffff25] bg-opacity-90 border-1 border-accent hover:bg-opacity-70 ">
+              <button className="btn" onClick={handleAdd}>
                 <Plus size={14} /> Add
               </button>
             </div>
@@ -164,7 +247,7 @@ const springStatus = {
 
                 <input type="search" 
                 id="search" 
-                className="w-[min(30vw,300px)] block"
+                className="!w-[min(30vw,300px)]"
                 required
                 />
                 <label htmlFor="search" className="opacity-20" ><Search />Search Keyword</label>
@@ -177,7 +260,7 @@ const springStatus = {
 
              <div className="flex-wrapper flex  gap-10">
         
-
+             {isFetching && <SpinnerFetching/>}
               <motion.table className={` shrink-0 ${tableFilter === "all" ?  "start" : ""}`}
               
               layout transition={{
@@ -188,21 +271,46 @@ const springStatus = {
                 <thead>
                   <tr>
                     <th className="w-[30px] text-center">#</th>
-                    <th className="w-[80px] text-center">Status 1</th>
-                    <th>Title</th>
+                    <th className="w-[80px] text-center">Status</th>
+                    <th className="w-[80px] text-center">Title</th>
+                    <th className="w-[80px] text-center">Tag</th>
+                    <th className="w-[80px] text-center">Category</th>
+                    <th className="w-[80px] text-center">Published Date</th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td className="w-[30px] text-center">1</td>
+
+                {isLoading && ( 
+                <tr>
+                    <td colSpan={9}>
+                        <TableLoader count="20" cols="4"/>
+                    </td>
+                </tr>)
+                }
+
+                
+              {post?.data.length === 0 && (
+                    <tr>
+                        <td colSpan={9}>
+                            No data
+                        </td>
+                    </tr>
+                )}
+
+                  {post?.data.map((item, key) => (
+                  <tr key={key}>
+                    <td className="w-[30px] text-center">{counter++}</td>
                     <td className="text-center">
-                      <button className={`${toggleStatus ? "active" : ""} toggle-status`}
-                      data-ison={toggleStatus}  
-                      onClick={handleToggleStatus}
+                      <button className={`${item.post_is_active  ? "active" : ""} toggle-status`}
+                      data-ison={item.post_is_active ? 1 : 0 }  
+                      onClick={()=> handleConfirmed(item.post_aid, item.post_is_active )}
                       ><motion.span layout transition={springStatus}></motion.span></button>
                       </td>
-                    <td>Lorem ipsum dolor sit</td>
+                    <td>{item.post_title}</td>
+                    <td>{item.post_tag}</td>
+                    <td>{item.post_category}</td>
+                    <td>{item.post_publish_date}</td>
                     <td>
 
                         <div className="table-action ">
@@ -218,7 +326,7 @@ const springStatus = {
                           </button>
                         </li>
                         <li>
-                          <button>
+                          <button onClick={()=>handlDelete(item)}>
                             <Trash /> <span>Delete</span> 
                           </button>
                         </li>
@@ -230,13 +338,13 @@ const springStatus = {
 
                     
                     </td>
-                  </tr>
+                  </tr>))}
      
 
                 </tbody>
               </motion.table>
 
-              <motion.table className={` shrink-0 ${tableFilter === "active" ?  "center" : ""}`} layout transition={springTable} >
+              {/* <motion.table className={` shrink-0 ${tableFilter === "active" ?  "center" : ""}`} layout transition={springTable} >
                 <thead>
                   <tr>
                     <th className="w-[30px] text-center">#</th>
@@ -251,7 +359,7 @@ const springStatus = {
                     <td className="text-center">
                       <button className={`${toggleStatus ? "active" : ""} toggle-status`}
                       data-ison={toggleStatus}  
-                      onClick={handleToggleStatus}
+                      // onClick={handleToggleStatus}
                       ><motion.span layout transition={springTable} ></motion.span></button>
                       </td>
                     <td>Lorem ipsum dolor sit</td>
@@ -344,7 +452,7 @@ const springStatus = {
      
 
                 </tbody>
-              </motion.table>
+              </motion.table> */}
              </div>
              
             </div>
@@ -357,7 +465,16 @@ const springStatus = {
         </div>
       </main>
 
-      <ModalAddPost/>
+    <AnimatePresence>
+    {store.isAdd && <ModalAddPost itemEdit={itemEdit}/>}
+      </ AnimatePresence>
+      
+      <AnimatePresence>
+      {store.success && <Notification />}
+      </AnimatePresence>
+
+      {store.error && <ModalError />}
+      {store.isDelete && <ModalDelete  queryKey="post" endpoint={`/v1/post/${id}`} />} 
         {/* <Notification/>             */}
       {/* <ModalConfirm/> */}
         {/* <ModalDelete/> */}

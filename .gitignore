@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+
+rest/v1/jwt
+rest/v1/notification/PHPMailer
+rest/v1/notification/mail-config.php
+
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
