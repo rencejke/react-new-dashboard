@@ -88,7 +88,11 @@ const Posts = () => {
     }
   );
 
+   const getAllActive = () => !isLoading && post?.data?.filter((item) => item.post_is_active === 1) 
+  const getAllInActive = () => !isLoading && post?.data.filter((item) => item.post_is_active === 0) 
+    
 
+ console.log(getAllActive() )
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
@@ -257,25 +261,19 @@ const Posts = () => {
                </form>
                </div>
              </div>
-
-             <div className="flex-wrapper flex  gap-10">
-        
              {isFetching && <SpinnerFetching/>}
+             <div className="flex-wrapper flex  gap-10">
               <motion.table className={` shrink-0 ${tableFilter === "all" ?  "start" : ""}`}
-              
-              layout transition={{
-                type: "spring",
-                stiffness: 700,
-                damping: 60
-              }}>
+               layout
+               transition={springTable}>
                 <thead>
                   <tr>
                     <th className="w-[30px] text-center">#</th>
-                    <th className="w-[80px] text-center">Status</th>
-                    <th className="w-[80px] text-center">Title</th>
-                    <th className="w-[80px] text-center">Tag</th>
-                    <th className="w-[80px] text-center">Category</th>
-                    <th className="w-[80px] text-center">Published Date</th>
+                    <th className="w-[80px] text-center ">Status</th>
+                    <th className=" ">Title</th>
+                    <th className=" ">Tag</th>
+                    <th className=" ">Category</th>
+                    <th className=" ">Published Date</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -343,26 +341,56 @@ const Posts = () => {
 
                 </tbody>
               </motion.table>
-
-              {/* <motion.table className={` shrink-0 ${tableFilter === "active" ?  "center" : ""}`} layout transition={springTable} >
+              <motion.table className={` shrink-0 ${tableFilter === "active" ?  "center" : ""}`}
+              layout
+               transition={{
+                type: "spring",
+                stiffness: 700,
+                damping: 60
+              }}>
                 <thead>
                   <tr>
                     <th className="w-[30px] text-center">#</th>
-                    <th className="w-[80px] text-center">Status 2</th>
-                    <th>Title</th>
+                    <th className="w-[80px] text-center">Status</th>
+                    <th className="w-[80px] text-center">Title</th>
+                    <th className="w-[80px] text-center">Tag</th>
+                    <th className="w-[80px] text-center">Category</th>
+                    <th className="w-[80px] text-center">Published Date</th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td className="w-[30px] text-center">1</td>
+
+                {isLoading && ( 
+                <tr>
+                    <td colSpan={9}>
+                        <TableLoader count="20" cols="4"/>
+                    </td>
+                </tr>)
+                }
+
+                
+              {getAllActive().length === 0 && (
+                    <tr>
+                        <td colSpan={9}>
+                            No data
+                        </td>
+                    </tr>
+                )}
+
+                  {!isLoading && getAllActive().map((item, key) => (
+                  <tr key={key}>
+                    <td className="w-[30px] text-center">{counter++}</td>
                     <td className="text-center">
-                      <button className={`${toggleStatus ? "active" : ""} toggle-status`}
-                      data-ison={toggleStatus}  
-                      // onClick={handleToggleStatus}
-                      ><motion.span layout transition={springTable} ></motion.span></button>
+                      <button className={`${item.post_is_active  ? "active" : ""} toggle-status`}
+                      data-ison={item.post_is_active ? 1 : 0 }  
+                      onClick={()=> handleConfirmed(item.post_aid, item.post_is_active )}
+                      ><motion.span layout transition={springStatus}></motion.span></button>
                       </td>
-                    <td>Lorem ipsum dolor sit</td>
+                    <td>{item.post_title}</td>
+                    <td>{item.post_tag}</td>
+                    <td>{item.post_category}</td>
+                    <td>{item.post_publish_date}</td>
                     <td>
 
                         <div className="table-action ">
@@ -378,7 +406,7 @@ const Posts = () => {
                           </button>
                         </li>
                         <li>
-                          <button>
+                          <button onClick={()=>handlDelete(item)}>
                             <Trash /> <span>Delete</span> 
                           </button>
                         </li>
@@ -390,37 +418,61 @@ const Posts = () => {
 
                     
                     </td>
-                  </tr>
+                  </tr>))}
      
 
                 </tbody>
               </motion.table>
-
               <motion.table className={` shrink-0 ${tableFilter === "inactive" ?  "end" : ""}`}
-              
-              layout transition={springTable} >
+                layout
+             transition={{
+                type: "spring",
+                stiffness: 700,
+                damping: 60
+              }}>
                 <thead>
                   <tr>
                     <th className="w-[30px] text-center">#</th>
-                    <th className="w-[80px] text-center">Status 3</th>
-                    <th>Title</th>
+                    <th className="w-[80px] text-center">Status</th>
+                    <th className="w-[80px] text-center">Title</th>
+                    <th className="w-[80px] text-center">Tag</th>
+                    <th className="w-[80px] text-center">Category</th>
+                    <th className="w-[80px] text-center">Published Date</th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td className="w-[30px] text-center">1</td>
+
+                {isLoading && ( 
+                <tr>
+                    <td colSpan={9}>
+                        <TableLoader count="20" cols="4"/>
+                    </td>
+                </tr>)
+                }
+
+                
+              {post?.data.length === 0 && (
+                    <tr>
+                        <td colSpan={9}>
+                            No data
+                        </td>
+                    </tr>
+                )}
+
+                  {!isLoading && getAllInActive().map((item, key) => (
+                  <tr key={key}>
+                    <td className="w-[30px] text-center">{counter++}</td>
                     <td className="text-center">
-                      <button className={`${toggleStatus ? "active" : ""} toggle-status`}
-                      data-ison={toggleStatus}  
-                      onClick={handleToggleStatus}
-                      ><motion.span layout transition={{
-                        type: "spring",
-                        stiffness: 700,
-                        damping: 60
-                      }}></motion.span></button>
+                      <button className={`${item.post_is_active  ? "active" : ""} toggle-status`}
+                      data-ison={item.post_is_active ? 1 : 0 }  
+                      onClick={()=> handleConfirmed(item.post_aid, item.post_is_active )}
+                      ><motion.span layout transition={springStatus}></motion.span></button>
                       </td>
-                    <td>Lorem ipsum dolor sit</td>
+                    <td>{item.post_title}</td>
+                    <td>{item.post_tag}</td>
+                    <td>{item.post_category}</td>
+                    <td>{item.post_publish_date}</td>
                     <td>
 
                         <div className="table-action ">
@@ -436,7 +488,7 @@ const Posts = () => {
                           </button>
                         </li>
                         <li>
-                          <button>
+                          <button onClick={()=>handlDelete(item)}>
                             <Trash /> <span>Delete</span> 
                           </button>
                         </li>
@@ -448,11 +500,11 @@ const Posts = () => {
 
                     
                     </td>
-                  </tr>
+                  </tr>))}
      
 
                 </tbody>
-              </motion.table> */}
+              </motion.table>
              </div>
              
             </div>
