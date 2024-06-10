@@ -120,7 +120,7 @@ const ModalAddPost = ({ itemEdit }) => {
 
                   {(props) => {
                   return (
-                  <Form>
+                  <Form className='h-[calc(100%-50px)]'>
                 <div className="input-wrapper ">
                 <InputText
                 label="Title"
@@ -152,21 +152,28 @@ const ModalAddPost = ({ itemEdit }) => {
                         className="rounded-tr-md rounded-tl-md h-[200px] max-h-[200px] w-full object-cover object-center m-auto"
                         />
                             ) : (
-                        <span className="min-h-20 flex items-center justify-center">
-                        <span className="text-accent mr-1">Drag & Drop</span>{" "}
+                                <>
+                        <div className='relative pointer-events-none'>
+                        <img src='https://via.placeholder.com/300x200' />
+                         <div className='absolute z-[9999] top-16 left-0 right-0 font-bold'>
+                         <span className="min-h-20 flex items-center justify-center">
+                        <span className="text-accent mr-1">Drag & Dropt</span>{" "}
                         photo here or{" "}
                         <span className="text-accent ml-1">Browse</span>
                         </span>
+                         </div>
+                        </div>
+                                </>
                         )}
 
-                        {(photo !== null ||
+                        {/* {(photo !== null ||
                         (itemEdit && itemEdit.post_image !== "")) && (
-                        <span className="min-h-10 flex items-center justify-center">
+                        <span className="min-h-10 flex items-center justify-center pointer-events-none">
                             <span className="text-accent mr-1">Drag & Drop</span>{" "}
                             photo here or{" "}
                             <span className="text-accent ml-1">Browse</span>
                             </span>
-                          )}
+                          )} */}
                         <InputFileUpload
                         label="Photo"
                         name="photo"

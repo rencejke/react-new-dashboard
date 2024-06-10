@@ -64,6 +64,19 @@
 } 
 
 @layer base {
+
+  /* react-table */
+
+
+.search {
+    @apply px-2 pt-6 bg-secondary text-center 
+}
+
+.search input {
+    @apply p-1 border border-primary rounded w-[500px] outline-none 
+}
+
+
   body {
     @apply font-sansRegular leading-relaxed overflow-x-hidden bg-primary text-header tracking-wide	
   }
@@ -137,7 +150,7 @@
   }
   table tbody tr td,
   table thead tr th {
-    @apply p-2 py-3  text-left text-xs font-normal 
+    @apply p-2 py-3  text-left text-[14px] font-normal 
   }
 
 }

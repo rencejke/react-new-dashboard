@@ -1,10 +1,10 @@
 export const devPath = "/vite-dashboard";
 
-export const devBaseImgUrl="http://localhost/vite-main-dashboard/public/img/"
+export const devBaseImgUrl="http://localhost/vite-dashboard-main/public/img/"
 
 export const baseImgUrl2 ="../../img"
 
-export const urlPathPortfolio = "http://localhost/vite-main-dashboard";
+export const urlPathPortfolio = "http://localhost/vite-dashboard-main";
 export const devApiUrl = `${urlPathPortfolio}/rest`;
 export const devKey = "$2a$12$47wDvbLInZif/PVS8B6P3.7WxyJvUpBzZAWCsnWJUKq3nrn4qgmeO";
 
